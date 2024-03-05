@@ -5,7 +5,7 @@ import java.util.Observable;
 
 
 /** The state of a game of 2048.
- *  @author TODO: YOUR NAME HERE
+ *  @author TODO: Lingsb
  */
 public class Model extends Observable {
     /** Current contents of the board. */
@@ -138,6 +138,13 @@ public class Model extends Observable {
      * */
     public static boolean emptySpaceExists(Board b) {
         // TODO: Fill in this function.
+        for (int row = 0; row < b.size(); row += 1) {
+            for (int col = 0; col < b.size(); col += 1) {
+                if(b.tile(col,row) == null) {
+                   return true;
+                }
+            }
+        }
         return false;
     }
 
@@ -148,6 +155,17 @@ public class Model extends Observable {
      */
     public static boolean maxTileExists(Board b) {
         // TODO: Fill in this function.
+            for (int col = 0; col < b.size(); col += 1) {
+                for (int row = 0; row < b.size(); row += 1) {
+                    if(b.tile(col,row) == null) {
+                        continue;
+                    }
+                    int value = b.tile(col, row).value();
+                    if (value == MAX_PIECE) {
+                        return true;
+                    }
+                }
+            }
         return false;
     }
 
@@ -159,7 +177,40 @@ public class Model extends Observable {
      */
     public static boolean atLeastOneMoveExists(Board b) {
         // TODO: Fill in this function.
-        return false;
+                if(emptySpaceExists(b) || maxTileExists(b)) {
+                    return true;
+                }
+                for (int col = 0; col < b.size(); col += 1) {
+                    for (int row = 0; row < b.size(); row += 1) {
+                        if(b.tile(col,row) == null) {
+                            return true;
+                        }
+                        //找到两个相同值的块在同一列
+                        if((col + 1) < b.size()) {
+                            if(b.tile(col,row).value() == b.tile(col + 1, row).value()){
+                                return true;
+                            }
+                        }
+                        if((col - 1) >= 0) {
+                            if(b.tile(col,row).value() == b.tile(col - 1, row).value()) {
+                                return true;
+                            }
+                        }
+                        //找到两个相同值的块在同一行
+                        if((row + 1) < b.size()) {
+                            if((b.tile(col,row).value() == b.tile(col, row + 1).value())) {
+                                return true;
+                            }
+                        }
+                        if((row - 1) >= 0) {
+                            if(b.tile(col,row).value() == b.tile(col, row - 1).value()) {
+                                return true;
+                            }
+                        }
+
+                    }
+                }
+                            return false;
     }
 
 
